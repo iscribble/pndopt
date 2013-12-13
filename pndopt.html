@@ -85,7 +85,7 @@
 #extra-controls {
     position: absolute;
     left: 40px;
-    top: 480px;
+    top: 540px;
     z-index: 10000;
 }
 #solve {
@@ -266,6 +266,8 @@
         <label for="allow-8">Allow 8-direction movement</label><br />
     <label for="max-length">Max path length</label>
         <input id="max-length" value="16" size="3"/><br />
+    <label for="max-depth">Search Depth</label>
+        <input id="max-depth" type="range" min="1" max="25" value="1"><br /><span style="color:red; font-size:15px;">Warning: Can crash if depth set too high.</span><br />
     <input type="button" value="Solve" id="solve"/>
 </div>
 
@@ -380,6 +382,7 @@ function create_empty_board() {
     return result;
 }
 
+//Gets result map of board using each grid>div id name as a rc key.
 function get_board() {
     var result = create_empty_board();
     $('#grid > div').each(function() {
@@ -391,6 +394,7 @@ function get_board() {
     return result;
 }
 
+//Iterates through the board throwing an exception if type 'X' discovered.
 function ensure_no_X(board) {
     for (var i = 0; i < ROWS; ++ i) {
         for (var j = 0; j < COLS; ++ j) {
@@ -405,6 +409,7 @@ function copy_board(board) {
     return board.map(function(a) { return a.slice(); });
 }
 
+//regex matches class name patterns such as eX, e6, e0
 function get_type(elem) {
     return elem.className.match(/e([\dX])/)[1];
 }
@@ -434,6 +439,11 @@ function get_weights() {
     return weights;
 }
 
+//prev_1_orb means first orb in a sequence of three+
+//prev_2_orb means second orb in a sequence of three+
+//curr_orb is the current orb
+//1. Fill match_board with matching colors.
+//2. Populate the matches array with {type,count} objects, one for each match.
 function find_matches(board) {
     var match_board = create_empty_board();
 
@@ -476,18 +486,18 @@ function find_matches(board) {
     for (var i = 0; i < ROWS; ++ i) {
         for (var j = 0; j < COLS; ++ j) {
             var cur_orb = scratch_board[i][j];
-            if (typeof(cur_orb) == 'undefined') { continue; }
+            if (typeof(cur_orb) == 'undefined') { continue; } //if this position isn't part of a series, skip it.
             var stack = [make_rc(i, j)];
             var count = 0;
-            while (stack.length) {
-                var n = stack.pop();
-                if (scratch_board[n.row][n.col] != cur_orb) { continue; }
+            while (stack.length) { //while at least one item on the stack...
+                var n = stack.pop();     //n is the current rc object from the stack
+                if (scratch_board[n.row][n.col] != cur_orb) { continue; }  //Stop searching if this rc is not the same type.
                 ++ count;
-                scratch_board[n.row][n.col] = undefined;
-                if (n.row > 0) { stack.push(make_rc(n.row-1, n.col)); }
-                if (n.row < ROWS-1) { stack.push(make_rc(n.row+1, n.col)); }
-                if (n.col > 0) { stack.push(make_rc(n.row, n.col-1)); }
-                if (n.col < COLS-1) { stack.push(make_rc(n.row, n.col+1)); }
+                scratch_board[n.row][n.col] = undefined; //we have n. clear the scratch board for this starting spot.
+                if (n.row > 0) { stack.push(make_rc(n.row-1, n.col)); } //if we aren't on the first row, add the orb above this one to the stack.
+                if (n.row < ROWS-1) { stack.push(make_rc(n.row+1, n.col)); } //if we aren't on the last row, add the orb below this one to the stack.
+                if (n.col > 0) { stack.push(make_rc(n.row, n.col-1)); } //if we aren't in the first column, add the orb to the left of this one to the stack.
+                if (n.col < COLS-1) { stack.push(make_rc(n.row, n.col+1)); } //if we aren't in the last column, add the orb to the right of this one to the stack.
             }
             matches.push(make_match(cur_orb, count));
         }
@@ -548,6 +558,9 @@ function in_place_remove_matches(board, match_board) {
     return board;
 }
 
+//starting in the last row and moving up, if this orb is not an x, decrement dest_i
+// as we travel upward, assign this orb's type to the orb in dest_i's row.
+// once we finish the column, change all rows above last orb to 'X'
 function in_place_drop_empty_spaces(board) {
     for (var j = 0; j < COLS; ++ j) {
         var dest_i = ROWS-1;
@@ -564,6 +577,7 @@ function in_place_drop_empty_spaces(board) {
     return board;
 }
 
+//direction 0 is to the right, incremented clockwise.
 function can_move_orb(rc, dir) {
     switch (dir) {
         case 0: return                    rc.col < COLS-1;
@@ -600,6 +614,7 @@ function in_place_swap_orb(board, rc, dir) {
     return {board: board, rc: rc};
 }
 
+//returns a copied solution board, path and is_done.
 function copy_solution_with_cursor(solution, i, j, init_cursor) {
     return {board: copy_board(solution.board),
             cursor: make_rc(i, j),
@@ -665,6 +680,8 @@ function is_8_dir_movement_supported() {
     return $('#allow-8')[0].checked;
 }
 
+//creates a list of solutions, one for every direction.
+//Then adds to existing solutions, sorts and cuts the weakest choices.
 function evolve_solutions(solutions, weights, dir_step) {
     var new_solutions = [];
     solutions.forEach(function(s) {
@@ -684,7 +701,7 @@ function evolve_solutions(solutions, weights, dir_step) {
     });
     solutions = solutions.concat(new_solutions);
     solutions.sort(function(a, b) { return b.weight - a.weight; });
-    return solutions.slice(0, MAX_SOLUTIONS_COUNT);
+    return solutions.slice(0, MAX_SOLUTIONS_COUNT * $('#max-depth').val());
 }
 
 function solve_board(board, step_callback, finish_callback) {
@@ -775,6 +792,7 @@ function simplify_path(xys) {
     return simplified_xys;
 }
 
+//if the starting location is the same and if the matches are the same, only use the first solution found.
 function simplify_solutions(solutions) {
     var simplified_solutions = [];
     solutions.forEach(function(solution) {
@@ -785,6 +803,10 @@ function simplify_solutions(solutions) {
             }
             if (!equals_matches(simplified_solution.matches, solution.matches)) {
                 continue;
+            }
+            //same starting point, same matches...replace, not add-on @dnapack
+            if (simplified_solution.path.length > solution.path.length) {
+                simplified_solutions[s] = solution;
             }
             return;
         }
