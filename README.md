@@ -3,7 +3,11 @@ pndopt --- Puzzle & Dragons Optimizer
 
 ![Screenshot](screenshot.png)
 
-`pndopt` is a Javascript application to find an optimal path leading to a high-combo move in Puzzle & Dragons. This fork is an attempt expand upon [the original version written by kennytm](https://github.com/kennytm/pndopt).
+This project is a Fork of [the original version written by kennytm](https://github.com/kennytm/pndopt). 
+
+The purpose of this fork is to refator the scripting so that OOP objects such as Orb, Board and Solution are utilized in the code. It is my belief that doing so will allow easier puzzle-solving optimization in the future.
+
+`pndopt` is a Javascript application to find an optimal path leading to a high-combo move in Puzzle & Dragons.
 
 I recommend only using it in an emergency, however it can be a helpful training tool as well!
 
