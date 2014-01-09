@@ -320,7 +320,7 @@ function evolve_solutions(solutions, weights, dir_step) {
     solutions.sort(function(a, b) {
     	return b.weight - a.weight;
     });
-    return solutions.slice(0, MAX_SOLUTIONS_COUNT + Number($('#max-depth').val()));
+    return solutions.slice(0, MAX_SOLUTIONS_COUNT * Number($('#max-depth').val()));
     
 }
 
