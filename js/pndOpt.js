@@ -336,6 +336,10 @@ function get_max_path_length() {
   return +$('#max-length').val();
 }
 
+function set_max_path_length(length) {
+  $('#max-length').val(length);
+}
+
 function is_8_dir_movement_supported() {
   return $('#allow-8')[0].checked;
 }
@@ -544,6 +548,7 @@ function clear_canvas() {
 
 function displaySolutions(solutions, solveBoard) {
   var count=0, html_array = [];
+  last_solution_state = solutions.slice();
   solutions = simplify_solutions(solutions, 300);
   var sortType = $('input:radio[name=sortType]:checked').val();
   solutions.sort(function (a, b) {
@@ -588,4 +593,28 @@ function getSimplePathXYs(solution) {
   });
 
   return simplify_path(xys);
+}
+
+//Used to increase path length without losing current progress.
+//Increase is the number of steps(>0) to expand the maximum path.
+function lengthenSolutions(increase) {
+  beginTest("PAD");
+  $('#solve').get(0).disabled = true;
+  var step_cb = function (p, max_p) {
+    $('#status').text('Solving (' + p + '/' + max_p + ')...');
+  };
+
+  var max_length = get_max_path_length(); //plus what? if we 
+  var solve_state = {
+    step_callback: step_cb,
+    finish_callback: displaySolutions,
+    max_length: max_length + increase,
+    dir_step: is_8_dir_movement_supported() ? 1 : 2,
+    p: max_length,
+    solutions: last_solution_state,
+    weights: get_weights(),
+    solveBoard: new Board(global_board.grid),
+  };
+  set_max_path_length(solve_state.max_length);
+  solve_board_step(solve_state);
 }
