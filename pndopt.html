@@ -46,6 +46,7 @@ $(function() {
     $('#solve').click(function() {
     	beginTest("PAD");
         var solver_button = this;
+        resetSolutionIds();
         global_board = new Board();
         global_board.refresh();
         
