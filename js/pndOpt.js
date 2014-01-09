@@ -501,7 +501,7 @@ function displaySolutions(solutions, solveBoard){
 	var sortType = $('input:radio[name=sortType]:checked').val();
 	solutions.sort(function(a, b) {
 		//weight first, then path
-		var rm =  b.weight - a.weight;
+		var rm =  (b.weight - a.weight).toFixed(2);
 		if (sortType == "length") {
 			return (rm != 0) ? rm : (a.path.length - b.path.length);
 		}
