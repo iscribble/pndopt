@@ -524,7 +524,7 @@ function deepSolutionSort(a,b) {
 	a.simpleXYs = getSimplePathXYs(a);
 	b.simpleXYs = getSimplePathXYs(b);
 	var turns = a.simpleXYs.length - b.simpleXYs.length;
-	return turns == 0 ? turns : (a.path.length - b.path.length);
+	return turns != 0 ? turns : (a.path.length - b.path.length);
 }
 
 function getSimplePathXYs(solution) {
