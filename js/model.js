@@ -1,6 +1,11 @@
 /**
  * 
  */
+var gSolutionId = 0; //global variable used to generate solution IDs consistent across mutiple runs.
+function resetSolutionIds() {
+  gSolutionId = 0;
+}
+
 function Coordinate(row, col){
   this.row = row || 0;
   this.col = col || 0;
@@ -77,6 +82,7 @@ function Solution(board, path, is_done, cursor, init_cursor, weight, matches){
   this.init_cursor = init_cursor? new Coordinate(init_cursor.row,init_cursor.col) : new Coordinate();;
   this.weight = weight || 0;
   this.matches = matches? matches.slice() : new Array();
+  this.id = gSolutionId++;
 }
 
 Solution.prototype.insertMatch = function(match){
