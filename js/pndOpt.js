@@ -155,7 +155,7 @@ function compute_weight(matches, weights) {
         total_weight += multi_orb_bonus * base_weight;
     });
     var combo_bonus = (matches.length - 1) * COMBO_BONUS + 1;
-    return total_weight * combo_bonus;
+    return (total_weight * combo_bonus).toFixed(2);
 }
 
 function show_element_type(jqel, type) {
@@ -367,7 +367,7 @@ function solve_board_step(solve_state) {
 
 function add_solution_as_li(html_array, solution) {
     html_array.push('<li>W=');
-    html_array.push(solution.weight.toFixed(2));
+    html_array.push(solution.weight);
     html_array.push(', L=');
     html_array.push(solution.path.length);
     var sorted_matches = solution.matches.slice();
@@ -501,7 +501,7 @@ function displaySolutions(solutions, solveBoard){
 	var sortType = $('input:radio[name=sortType]:checked').val();
 	solutions.sort(function(a, b) {
 		//weight first, then path
-		var rm =  (b.weight - a.weight).toFixed(2);
+		var rm =  b.weight - a.weight;
 		if (sortType == "length") {
 			return (rm != 0) ? rm : (a.path.length - b.path.length);
 		}
