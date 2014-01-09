@@ -497,7 +497,7 @@ function clear_canvas() {
 }
 
 function displaySolutions(solutions, solveBoard){
-	var count=0, html_array = [];
+	var html_array = [];
 	solutions = simplify_solutions(solutions, 300);
 	var sortType = $('input:radio[name=sortType]:checked').val();
 	solutions.sort(function(a, b) {
@@ -514,7 +514,6 @@ function displaySolutions(solutions, solveBoard){
 		if (count < MAX_SOLUTIONS_COUNT) {
 			add_solution_as_li(html_array, solution, solveBoard);
 		}
-		count++;
 	});
 	$('#solutions > ol').html(html_array.join(''));
 	$('#solve').get(0).disabled = false;
