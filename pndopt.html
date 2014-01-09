@@ -14,6 +14,7 @@
 var global_board = new Board();
 var global_solutions = [];
 var global_index = 0;
+var last_solution_state = []; //Used to store last set of solutions for expanding path length
 
 $(function() {
     $('#grid > div').each(function() {
