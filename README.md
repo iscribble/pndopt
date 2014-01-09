@@ -3,11 +3,9 @@ pndopt --- Puzzle & Dragons Optimizer
 
 ![Screenshot](screenshot.png)
 
-`pndopt` is a Javascript application to find an optimal path leading to a high-combo move in Puzzle & Dragons.
+`pndopt` is a Javascript application to find an optimal path leading to a high-combo move in Puzzle & Dragons. This fork is an attempt expand upon [the original version written by kennytm](https://github.com/kennytm/pndopt).
 
-Only use it in emergency ☺!
-
-*(Yes I knew there were [Big Combo](http://www.fonescience.com/bigcombo/) and [Path & Decision](http://pnd.cubeforge.net/), but the former is gone and I'm unsatisfied with the result of the latter.)*
+I recommend only using it in an emergency, however it can be a helpful training tool as well!
 
 Usage
 -----
@@ -22,8 +20,6 @@ Requirements
 * Firefox (version 19 or above).
 * Screen resolution of 1280×800 or above.
 
-It may work in other configurations but I don't guarantee it will work ☺.
-
 TODO
 ----
 
@@ -31,4 +27,3 @@ TODO
 * Resolve overlapping lines and points.
 * Simulate swapping and matching when playing the animation.
 * The default weight of the profiles may need to be adjusted.
-
