@@ -151,6 +151,7 @@
 
 /**Styles below refer to search tools and components thereof **/
 #searchTools {
+  visibility:hidden;
   position:absolute;
   left:500px;
   top:360px;
