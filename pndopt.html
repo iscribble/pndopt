@@ -33,8 +33,9 @@ $(function() {
         show_element_type($(this), target_type);
         clear_canvas();
     });
-
+    
     $('#hand, #import-popup, #change-popup').hide();
+    $('#searchTools').width($('#profile').width());
 
     $('#profile-selector').change(function() {
         var values = this.value.split(/,/);
@@ -45,7 +46,7 @@ $(function() {
     });
 
     $('#solve').click(function() {
-    	beginTest("PAD");
+        beginTest("PAD");
         var solver_button = this;
         resetSolutionIds();
         global_board = new Board();
@@ -160,6 +161,22 @@ $(function() {
         show_board(board);
         clear_canvas();
         $('#change-popup').hide();
+    });
+    
+    $('#pathPlusBtn').click(function(){
+        lengthenSolutions(1);
+    });
+    
+    $('#max-length').change(function() {
+        $('#searchTools').css('visibility', 'hidden');
+    });
+
+    $(':text').keypress(function() {
+        $('#searchTools').css('visibility', 'hidden');
+    });
+
+    $('#allow-8').change(function() {
+        $('#searchTools').css('visibility', 'hidden');
     });
 });
 
@@ -285,6 +302,13 @@ $(function() {
     <label for="max-depth">Search Depth</label>
         <input id="max-depth" type="range" min="1" max="15" value="1"><br /><span style="color:red; font-size:15px;">Warning: Can crash if depth set too high.</span><br />
     <input type="button" value="Solve" id="solve"/>
+</div>
+
+<div id="searchTools">
+  Max Path Length
+  <div id="pathPlusBtn" class="circle">
+    <div id="plus"></div>
+  </div>
 </div>
 
 <div id="extra-controls">
