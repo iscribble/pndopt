@@ -569,6 +569,7 @@ function displaySolutions(solutions, solveBoard) {
   });
   $('#solutions > ol').html(html_array.join(''));
   $('#solve').get(0).disabled = false;
+  $('#searchTools').css('visibility', 'visible');
   endTest("PAD");
 }
 
