@@ -38,6 +38,7 @@ $(function() {
     $('#searchTools').width($('#profile').width());
 
     $('#profile-selector').change(function() {
+        $('#searchTools').css('visibility', 'hidden');
         var values = this.value.split(/,/);
         for (var i = 0; i < TYPES; ++ i) {
             $('#e' + i + '-normal').val(values[2*i]);
@@ -167,7 +168,7 @@ $(function() {
         lengthenSolutions(1);
     });
     
-    $('#max-length').change(function() {
+    $('#max-depth').change(function() {
         $('#searchTools').css('visibility', 'hidden');
     });
 
