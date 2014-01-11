@@ -48,6 +48,7 @@ $(function() {
 
     $('#solve').click(function() {
         beginTest("PAD");
+        $('#searchTools').css('visibility', 'hidden');
         var solver_button = this;
         resetSolutionIds();
         global_board = new Board();
