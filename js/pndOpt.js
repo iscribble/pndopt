@@ -420,6 +420,10 @@ function add_solution_as_li(html_array, solution) {
   html_array.push(solution.weight);
   html_array.push(', L=');
   html_array.push(solution.path.length);
+  if ($('input:radio[name=sortType]:checked').val() != "length") {
+    html_array.push(', &#8623;=');
+    html_array.push(getSimplePathXYs(solution).length-1);
+  }
   var sorted_matches = solution.matches.slice();
   //sort the colors of each match
   sorted_matches.sort(function (a, b) {
