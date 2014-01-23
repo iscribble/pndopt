@@ -111,3 +111,36 @@ function getAvgMetrics(fName, metricArray){
 	}
 	return "N/A";
 }
+
+//enable argument is optional, defaults to false; 
+//  If set to true, el.selectstart will be re-enabled.
+//namespace argument is optional, defaults to no namespace.
+//  If provided, (and not "") then a namespace will be applied to
+//  the selectstart event.
+function disableSelection(el, namespace, enable){
+  var ns="selectstart", en = enable || false;
+  if (typeof namespace == "string" && namespace.length >0) {
+    ns = "selectstart." + namespace;
+  }
+  if (!enable) {
+    $(el).attr('unselectable','on')
+     .css({'-moz-user-select':'-moz-none',
+           '-moz-user-select':'none',
+           '-o-user-select':'none',
+           '-khtml-user-select':'none', /* you could also put this in a class */
+           '-webkit-user-select':'none',/* and add the CSS class here instead */
+           '-ms-user-select':'none',
+           'user-select':'none'
+     }).on(ns, function(){ return false; });
+  } else {
+    $(el).attr('unselectable','off')
+     .css({'-moz-user-select':'text',
+           '-moz-user-select':'text',
+           '-o-user-select':'text',
+           '-khtml-user-select':'text',
+           '-webkit-user-select':'text',
+           '-ms-user-select':'text',
+           'user-select':'text'
+     }).off(ns);
+  }
+}

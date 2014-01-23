@@ -7,25 +7,44 @@
 <script src="js/pndOpt.js"></script>
 <link rel="stylesheet" type="text/css" href="./pndOpt.css">
 <link rel="stylesheet" href="github-fork-ribbon-css/gh-fork-ribbon.css"/>
+
 <title>Puzzle &amp; Dragons optimizer</title>
 <meta charset="utf-8"/>
 
 <script>
 var global_board = new Board();
+//var mouseDownIntervalId = 0;
 var global_solutions = [];
 var global_index = 0;
 var last_solution_state = []; //Used to store last set of solutions for expanding path length
 
 $(function() {
+    PaintBrush.init();
+    
+    $('#grid').mousedown(function() {
+        PaintBrush.mouseDown = true;
+    });
+    $('html').on('mouseup', function() {
+        PaintBrush.mouseDown = false;
+        //clearInterval(mouseDownIntervalId);
+        clear_canvas();
+    });
+    
+    $('#grid > div, .change-target').on("mouseover",function() {
+        if (PaintBrush.mouseDown && PaintBrush.enabled) {
+          show_element_type($(this), PaintBrush.color);
+        }
+    });
+
     $('#grid > div').each(function() {
         $(this).addClass('eX');
     })
 
-    $('#grid > div, .change-target').mousedown(function(e) {
+    $('#grid > div, .change-target').on("mousedown",function(e) {        
         var type = get_type(this);
         var target_type;
         switch (e.which) {
-            case 1: target_type = advance_type(type, 1); break;     // left
+            case 1: target_type = PaintBrush.enabled? PaintBrush.color : advance_type(type, 1); break;     // left
             case 3: target_type = advance_type(type, -1); break;    // right
             case 2: target_type = 'X'; break;                       // middle
             default: break;
@@ -187,8 +206,6 @@ $(function() {
 </head>
 <body>
 
-<p id="status">...</p>
-
 <canvas id="path" width="380" height="316">
 </canvas>
 
@@ -297,12 +314,14 @@ $(function() {
 </div>
 
 <div id="controls">
+    <div class="palette" id="pbPalette"></div><br/>
     <input type="checkbox" id="allow-8"/>
         <label for="allow-8">Allow 8-direction movement</label><br />
     <label for="max-length">Max path length</label>
         <input id="max-length" value="16" size="3"/><br />
     <label for="max-depth">Search Depth</label>
-        <input id="max-depth" type="range" min="1" max="15" value="1"><br /><span style="color:red; font-size:15px;">Warning: Can crash if depth set too high.</span><br />
+        <input id="max-depth" type="range" min="1" max="15" value="1"><br />
+    <span id="status">...</span><br/>
     <input type="button" value="Solve" id="solve"/>
 </div>
 

@@ -623,3 +623,33 @@ function lengthenSolutions(increase) {
   set_max_path_length(solve_state.max_length);
   solve_board_step(solve_state);
 }
+
+/**
+* Function to set the "paintbrush" mode.
+**/
+function setPaint(){
+  if(this.id == "paintBrush") {
+    var $cursors = $("#grid > div, #solutions li, .change-target");
+    if (PaintBrush.enabled) {
+      $('#paintBrush').replaceWith(PaintBrush.$image[0]);
+      $("html").css("cursor","auto");
+      $cursors.css("cursor","pointer");
+      disableSelection($("div"),"dragPaintbrush",true);
+      $('#pbBucket').hide(400);
+    } else {
+      $('#paintBrush').replaceWith(PaintBrush.$image[1]);
+      disableSelection($("div"),"dragPaintbrush");
+      $("html").css("cursor","url('paintbrush.cur'), auto");
+      $cursors.css("cursor","url('paintbrush.cur'), auto");
+      
+      $('#pbBucket').show(400);
+      //$('#paintBrush').css("padding-bottom","5px");
+    }  
+    $('#paintBrush').on("click", setPaint);
+    PaintBrush.enabled = !PaintBrush.enabled;
+    return;
+  }
+  PaintBrush.color = this.id.slice(-1);
+  $(".paint").removeClass("highlight");
+  $(this).addClass("highlight");
+}

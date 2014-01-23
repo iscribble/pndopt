@@ -80,7 +80,7 @@
 #extra-controls {
     position: absolute;
     left: 40px;
-    top: 570px;
+    top: 630px;
     z-index: 10000;
 }
 #solve {
@@ -88,11 +88,6 @@
     height: 40px;
     font-size: 1.25em;
     font-weight: bold;
-}
-#status {
-    position: absolute;
-    top: 520px;
-    left: 100px;
 }
 #solutions {
     position: absolute;
@@ -203,4 +198,34 @@
 
 #pathPlusBtn:hover #plus {
   color: lightblue;
+}
+
+#pbPalette {
+  /*border: solid 1px black;*/
+  width:360px;
+  height:40px;
+    line-height:normal;
+
+}
+.palette {
+  margin: 5px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-bottom:0px;
+}
+.paint.color {
+	vertical-align: top;
+	line-height: 1.8em;
+}
+.paint.highlight {
+  margin: 2px;
+  border: solid 3px black;
+}
+.vertLine {
+width: 1px;
+background-color: black;
+height: 2em;
+position: absolute;
+top: .5em;
 }
