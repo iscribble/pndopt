@@ -7,8 +7,9 @@ var ORB_WIDTH = 60;
 var ORB_HEIGHT = 60;
 var MULTI_ORB_BONUS = 0.25;
 var COMBO_BONUS = 0.25;
-var MAX_SOLUTIONS_COUNT = ROWS * COLS * 8 * 2 + 381;
-//381 is the minimum addition to properly solve bbprbbbggprbgbhprgybhhgryybgrr
+var MAX_SOLUTIONS_COUNT = 5000;
+//var MAX_SOLUTIONS_COUNT = ROWS * COLS * 8 * 2 + 381; //861
+//+381 is the minimum addition to properly solve bbprbbbggprbgbhprgybhhgryybgrr
 
 //Gets result map of board using each grid>div id name as a rc key.
 function get_board() {
